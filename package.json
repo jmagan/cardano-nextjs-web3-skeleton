@@ -1,9 +1,9 @@
 {
-  "name": "cardano-nextjs-authjs-skeleton",
+  "name": "cardano-nextjs-web3-skeleton",
   "version": "0.1.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jmagan/cardano-nextjs-authjs-skeleton"
+    "url": "https://github.com/jmagan/cardano-nextjs-web3-skeleton"
   },
   "scripts": {
     "dev": "next dev",
