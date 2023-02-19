@@ -1,0 +1,10 @@
+{
+	"registration": {
+		"SUBJECT": "registration.SUBJECT",
+		"MESSAGE": "registration.MESSAGE"
+	},
+	"changeWallet": {
+		"SUBJECT": "changeWallet.SUBJECT",
+		"MESSAGE": "changeWallet.MESSAGE"
+	}
+}
