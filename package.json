@@ -22,6 +22,7 @@
     "@meshsdk/core": "^1.5.0",
     "@meshsdk/react": "^1.1.5",
     "@next/font": "13.1.6",
+    "@tanstack/react-table": "^8.7.9",
     "cardano-web3-utils": "../cardano-web3-utils",
     "eslint": "8.34.0",
     "eslint-config-next": "13.1.6",

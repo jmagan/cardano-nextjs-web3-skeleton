@@ -323,8 +323,8 @@ describe("/POST signup", () => {
         const body = await res.json();
 
         expect(res.status).toBe(400);
-        expect(body.errors[0]).toHaveProperty("msg");
-        expect(body.errors[0].msg).toBe("WALLET_ALREADY_EXISTS");
+        expect(body).toHaveProperty("message");
+        expect(body.message).toBe("WALLET_ALREADY_EXISTS");
       },
     });
   });
@@ -356,8 +356,8 @@ describe("/POST signup", () => {
         const body = await res.json();
 
         expect(res.status).toBe(400);
-        expect(body.errors[0]).toHaveProperty("msg");
-        expect(body.errors[0].msg).toBe("EMAIL_ALREADY_EXISTS");
+        expect(body).toHaveProperty("message");
+        expect(body.message).toBe("EMAIL_ALREADY_EXISTS");
       },
     });
   });

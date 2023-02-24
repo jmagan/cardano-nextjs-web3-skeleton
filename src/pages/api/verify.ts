@@ -13,7 +13,7 @@ const verifyRequestSchema = yup.object({
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
-    return res.status(404).send("");
+    return handleError(res, new HTTPError(405));
   }
   
   try {

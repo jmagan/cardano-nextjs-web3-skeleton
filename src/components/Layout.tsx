@@ -8,7 +8,7 @@ import {
   Center,
   Flex,
   Heading,
-  Spacer
+  Spacer,
 } from "@chakra-ui/react";
 import React from "react";
 import { useWallet } from "@meshsdk/react";
@@ -28,12 +28,16 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         textAlign="center"
         mt="2"
         position="absolute"
+        zIndex="-1"
       >
         <Link href="/">Cardano Web3</Link>
       </Heading>
       <Flex alignItems="center" p="2" h="60px">
         <Button onClick={() => router.push("/protected")} me="2">
           Protected
+        </Button>
+        <Button onClick={() => router.push("/admin/users")} me="2">
+          Admin
         </Button>
         <Spacer />
         {connected && (
@@ -49,17 +53,19 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               </>
             )}
             {status === "authenticated" && (
-              <Center
-                borderRadius="10px"
-                backgroundColor="gray.100"
-                me="2"
-                h="40px"
-                p="4"
-              >
-                <Box>
-                  <Icon as={FaUser} /> {session.user?.name}
-                </Box>
-              </Center>
+              <Link href="/profile">
+                <Center
+                  borderRadius="10px"
+                  backgroundColor="gray.100"
+                  me="2"
+                  h="40px"
+                  p="4"
+                >
+                  <Box>
+                    <Icon as={FaUser} /> {session.user?.name}
+                  </Box>
+                </Center>
+              </Link>
             )}
           </>
         )}

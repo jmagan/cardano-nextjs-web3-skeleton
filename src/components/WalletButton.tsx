@@ -50,10 +50,12 @@ export default function WalletButton() {
             direction="row"
             alignItems="center"
             borderRadius="var(--chakra-radii-md)"
+            backgroundColor="white"
             _hover={{ backgroundColor: "gray.50" }}
             cursor="pointer"
             onClick={() => {
               disconnect();
+              signOut();
             }}
           >
             <Text textTransform={"capitalize"} ms="2">
@@ -69,11 +71,11 @@ export default function WalletButton() {
                 h="40px"
                 alignItems="center"
                 borderRadius="var(--chakra-radii-md)"
+                backgroundColor="white"
                 _hover={{ backgroundColor: "gray.50" }}
                 cursor="pointer"
                 onClick={() => {
                   connect(wallet.name);
-                  signOut();
                 }}
               >
                 <Image src={wallet.icon} alt="icon" h="6" ms="2" />

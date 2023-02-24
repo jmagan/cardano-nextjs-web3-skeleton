@@ -1,3 +1,4 @@
+import { ApiResponse } from "@/types/api";
 import { Web3AuthenticationError } from "cardano-web3-utils";
 import { STATUS_CODES } from "http";
 import { NextApiResponse } from "next";
@@ -5,29 +6,26 @@ import uppercamelcase from "uppercamelcase";
 import { ValidationError } from "yup";
 
 export function handleError(res: NextApiResponse, err: unknown) {
-  let errorJson;
+  let errorJson: ApiResponse;
 
   if (err instanceof Web3AuthenticationError) {
-    errorJson = { errors: [{ msg: err.message }] };
+    errorJson = { message: err.message, code: err.httpErrorCode };
     res.status(err.httpErrorCode).json(errorJson);
   }
   if (err instanceof HTTPError) {
-    errorJson = { errors: [{ msg: err.message }] };
+    errorJson = { message: err.message, code: err.statusCode };
     res.status(err.statusCode).json(errorJson);
   } else if (err instanceof ValidationError) {
     errorJson = {
-      errors: err.errors.map((error) => {
-        return {
-          msg: error,
-        };
-      }),
+      message: err.errors,
+      code: 422
     };
     res.status(422).json(errorJson);
   } else if (err instanceof Error) {
-    errorJson = { errors: [{ msg: err.message }] };
+    errorJson = { message: err.message, code: 500 };
     res.status(500).json(errorJson);
   } else {
-    errorJson = { errors: { msg: err } };
+    errorJson = { message: String(err), code: 500 };
     res.status(500).json(errorJson);
   }
 
@@ -39,7 +37,7 @@ export function handleError(res: NextApiResponse, err: unknown) {
 export class HTTPError extends Error {
   statusCode: number;
 
-  constructor(code: number, message: string) {
+  constructor(code: number, message: string = "") {
     super(message || STATUS_CODES[code]);
     this.name = this.toName(code);
     this.statusCode = code;

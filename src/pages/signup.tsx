@@ -15,12 +15,12 @@ import {
   Link,
   Avatar,
   FormControl,
-  Select,
-  Alert,
-  AlertDescription,
+  Select
 } from "@chakra-ui/react";
 import { FaUserAlt, FaEnvelope } from "react-icons/fa";
 import { useWallet } from "@meshsdk/react";
+import { FeedbackAlert } from "@/components/FeedbackAlert";
+import { handleReactApiError } from "@/utils/react";
 
 const CFaUserAlt = chakra(FaUserAlt);
 const CFaEnvelope = chakra(FaEnvelope);
@@ -29,7 +29,7 @@ export default function SignUp() {
   const router = useRouter();
 
   const { wallet, connected } = useWallet();
-  const [errorMessage, setErrorMessage] = useState<Array<String>>([]);
+  const [errorMessage, setErrorMessage] = useState<string[]>([]);
 
   const [stakeAddress, setStakeAddress] = useState<string | undefined>(
     undefined
@@ -87,24 +87,7 @@ export default function SignUp() {
 
       router.push("/");
     } catch (err) {
-      const error = err as any;
-      if (!error?.response) {
-        setErrorMessage(["No Server Response"]);
-      } else if (error.response.status === 401) {
-        setErrorMessage(["Unauthorized"]);
-      } else if (error.response.status === 500) {
-        setErrorMessage(["Server error"]);
-      } else if (Array.isArray(error.response.data.errors.msg)) {
-        setErrorMessage(
-          error.response.data.errors.msg.map(
-            (val: any) => val.param + ": " + val.msg
-          )
-        );
-      } else {
-        setErrorMessage(
-          error.response.data.errors.map((error: any) => error.msg)
-        );
-      }
+      handleReactApiError(err, setErrorMessage);
     }
   };
 
@@ -136,16 +119,7 @@ export default function SignUp() {
               borderColor="gray.100"
               borderRadius="10px"
             >
-              {errorMessage.length > 0 &&
-                errorMessage.map((error) => {
-                  return (
-                    <Alert status="error" key={error as Key}>
-                      <AlertDescription>
-                        {error} <br />
-                      </AlertDescription>
-                    </Alert>
-                  );
-                })}
+              <FeedbackAlert errorMessage={errorMessage}/>
               <FormControl>
                 <InputGroup>
                   <InputLeftElement pointerEvents="none">

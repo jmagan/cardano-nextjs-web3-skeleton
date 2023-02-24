@@ -43,4 +43,4 @@ const UserSchema = new mongoose.Schema<User>(
 );
 
 UserSchema.plugin(mongoosePaginate);
-export default mongoose.models.User as Model<User, {}, {}, {}, typeof UserSchema> || mongoose.model<User>("User", UserSchema);
+export default mongoose.models.User as mongoose.PaginateModel<User, {}, {}> || mongoose.model<User, mongoose.PaginateModel<User>>("User", UserSchema);

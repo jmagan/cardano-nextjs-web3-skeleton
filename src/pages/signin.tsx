@@ -1,4 +1,4 @@
-import { FormEvent, Key, useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useWallet } from "@meshsdk/react";
@@ -12,17 +12,17 @@ import {
   Box,
   Avatar,
   FormControl,
-  Select,
-  Alert,
-  AlertDescription,
+  Select
 } from "@chakra-ui/react";
+import { handleReactApiError } from "@/utils/react";
+import { FeedbackAlert } from "@/components/FeedbackAlert";
 
 export default function Signin() {
   const router = useRouter();
 
   const { wallet, connected } = useWallet();
 
-  const [errorMessage, setErrorMessage] = useState<Array<String>>([]);
+  const [errorMessage, setErrorMessage] = useState<string[]>([]);
 
   const [stakeAddress, setStakeAddress] = useState<string | undefined>(
     undefined
@@ -69,20 +69,13 @@ export default function Signin() {
         redirect: false,
       };
 
-      const response = await signIn('credentials', signinPayload);
+      await signIn('credentials', signinPayload);
 
-      console.log(response);
-    } catch (err) {
-      const error = err as any;
-      if (!error?.status) {
-        setErrorMessage(["No Server Response"]);
-      } else if (error.status === 401) {
-        setErrorMessage(["Unauthorized"]);
-      } else if (error.status === 500) {
-        setErrorMessage(["Server error"]);
-      } else if (error.error) {
-        setErrorMessage(error.error);
+      if (router.query.callbackUrl && typeof router.query.callbackUrl === "string") {
+        router.push(new URL(router.query.callbackUrl));
       }
+    } catch (err) {
+      handleReactApiError(err, setErrorMessage);
     }
   };
 
@@ -113,16 +106,7 @@ export default function Signin() {
               borderColor="gray.100"
               borderRadius="10px"
             >
-              {errorMessage.length > 0 &&
-                errorMessage.map((error) => {
-                  return (
-                    <Alert status="error" key={error as Key}>
-                      <AlertDescription>
-                        {error} <br />
-                      </AlertDescription>
-                    </Alert>
-                  );
-                })}
+              <FeedbackAlert errorMessage={errorMessage}/>
               <FormControl>
                 <Select
                   color="gray.500"

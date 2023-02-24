@@ -1,11 +1,13 @@
 import mongoose from "mongoose";
 
 export default interface User {
-  _id: mongoose.Types.ObjectId;
+  _id: string;
   name: string;
   email: string;
   walletAddress: string;
   role: string;
   verification?: string;
   verified?: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 }

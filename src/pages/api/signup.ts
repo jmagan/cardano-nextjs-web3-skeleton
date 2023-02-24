@@ -24,7 +24,7 @@ export default async function handler(
 ) {
 
   if (req.method !== "POST") {
-    return res.status(404).send("");
+    return handleError(res, new HTTPError(405));
   }
 
   try {
