@@ -44,8 +44,12 @@ export default async function handler(
         role: req.body.role,
       });
 
-      await userToPost.save();
-      res.send({ message: "SUCCESS" });
+      try {
+        await userToPost.save();
+        res.send({ message: "SUCCESS" });
+      } catch (e) {
+        handleError(res, e);
+      }
       break;
     default:
       return handleError(res, new HTTPError(405));

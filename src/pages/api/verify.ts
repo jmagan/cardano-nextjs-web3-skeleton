@@ -6,6 +6,7 @@ import { handleError, HTTPError } from "@/utils/error";
 
 import UserModel from "@/models/UserModel";
 import User from "@/types/user";
+import dbConnect from "@/utils/db";
 
 const verifyRequestSchema = yup.object({
   id: yup.string().required()
@@ -17,11 +18,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
   
   try {
+    await dbConnect();
+
     const data = await verifyRequestSchema.validate(req.body, {stripUnknown: true});
 
     const user = await verificationExists(data.id);
     if (!user) {
-      return new HTTPError(400, 'NOT_FOUND_OR_ALREADY_VERIFIED');
+      return handleError(res, new HTTPError(400, 'NOT_FOUND_OR_ALREADY_VERIFIED'));
     }
     res.status(200).json(await verifyUser(user));
   } catch (error) {

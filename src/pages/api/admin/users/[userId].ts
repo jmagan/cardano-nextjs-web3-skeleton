@@ -55,8 +55,12 @@ export default async function handler(
         user.email = req.body.email;
         user.walletAddress = req.body.walletAddress;
         user.role = req.body.role;
-        user.save();
-        res.send({ message: "SUCCESS" });
+        try {
+          await user.save();
+          res.send({ message: "SUCCESS" });
+        } catch (e) {
+          handleError(res, e);
+        }
       } else {
         return handleError(res, new HTTPError(422));
       }

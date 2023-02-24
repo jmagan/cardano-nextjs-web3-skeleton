@@ -85,12 +85,26 @@ export const authOptions: AuthOptions = {
       if (!user) {
         return session;
       }
-      (session as ExtendedSession).role = user.role;
-      token.role = user.role;
+      (session as ExtendedSession).role = token.role as string;
       session.user!.name = user.name;
 
       return session;
     },
+    async jwt({token}) {
+      if (!token.sub) {
+        return token;
+      }
+      const user = await userService.findUserById(
+        new mongoose.Types.ObjectId(token.sub)
+      );
+
+      if (!user) {
+        return token;
+      }
+      token.role = user.role;
+
+      return token;
+    }
 
   },
 };

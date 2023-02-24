@@ -37,7 +37,7 @@ export default async function handler(
       if (user) {
         user.name = req.body.name;
         user.save();
-        res.send({ code: 400, message: "SUCCESS" });
+        res.send({ message: "SUCCESS" });
       } else {
         return handleError(res, new HTTPError(422, "USER_ERROR"));
       }

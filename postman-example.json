@@ -1,0 +1,577 @@
+{
+	"info": {
+		"_postman_id": "a2de0cee-b174-445d-860f-7dcd8156d26d",
+		"name": "Next JS",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "11365590"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "/signup",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "es",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "My Name",
+									"type": "text"
+								},
+								{
+									"key": "key",
+									"value": "a201012158200b513ad9b4924015ca0902ed079044d3ac5dbec2306f06948c10da8eb6e39f2d",
+									"type": "text"
+								},
+								{
+									"key": "signature",
+									"value": "845828a16761646472657373581de1f6a334a39057527cc60991600951cb7a9ad79897c31c65a1fa688ca5a166686173686564f4585e7b2275726c223a22484f53542f6170692f7369676e7570222c22616374696f6e223a225369676e207570222c2274696d657374616d70223a313637363830363731303138332c22656d61696c223a226f74726f40656d61696c2e6573227d5840d5b3e1cdc6a118b7eb93c1661c462937e1cf41d9aa3259e3e04664d72934116bee66f03320246c747ccb16707ebe8728ce1f12515c98c1c186a39082ea59ef0b",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{server}}/api/signup",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/verify",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "id",
+									"value": "555f28a1-f43a-427b-a47d-b89db6f0a806",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{server}}/api/verify",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"verify"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/change",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "admin@admin.com",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{server}}/api/change",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"change"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/reset",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "id",
+									"value": "8a08b467-e15d-4a4d-9bc2-8d3d0918a940",
+									"type": "text"
+								},
+								{
+									"key": "walletAddress",
+									"value": "stake1u89exkzjnh6898pjg632qv7tnqs6h073dhjg3qq9jp9tcsgq0wfzr",
+									"type": "text"
+								},
+								{
+									"key": "key",
+									"value": "a201012158203b6a27bcceb6a42d62a3a8d02a6f0d73653215771de243a63ac048a18b59da29",
+									"type": "text"
+								},
+								{
+									"key": "signature",
+									"value": "845828a16761646472657373581de1cb9358529df4729c3246a2a033cb9821abbfd16de4888005904abc41a166686173686564f458437b2275726c223a22484f53542f6170692f7265736574222c22616374696f6e223a225265736574222c2274696d657374616d70223a313637353530383330393734377d5840aa0caea7d0df25dfd4a896877e968434da1eebd95af951142be91bc2580bc676a45896567c9930418903d29ee50628cf0376fe2b2a12a502fa93326bd3fcd308",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{server}}/api/reset",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"reset"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/signin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.sendRequest({method: \"GET\", url: \"http://localhost:3000/api/auth/csrf\"}, (_, res) => {",
+									"    pm.variables.set('csrfToken', res.json().csrfToken);",
+									"    console.log(res.json().csrfToken)",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "key",
+									"value": "a201012158203b6a27bcceb6a42d62a3a8d02a6f0d73653215771de243a63ac048a18b59da29",
+									"type": "text"
+								},
+								{
+									"key": "signature",
+									"value": "845828a16761646472657373581de1cb9358529df4729c3246a2a033cb9821abbfd16de4888005904abc41a166686173686564f458577b2275726c223a22484f53542f6170692f617574682f63616c6c6261636b2f63726564656e7469616c73222c22616374696f6e223a224c6f67696e222c2274696d657374616d70223a313637363730393335353839347d5840ca01317a2c376371ad5e62d3c056efad1ff4e657760dc4fcd46d5673491fcef1e4c05cc56c781901df13fe27a77bf047afd272556c18486cee473368eeb90e0d",
+									"type": "text"
+								},
+								{
+									"key": "csrfToken",
+									"value": "{{csrfToken}}",
+									"type": "text"
+								},
+								{
+									"key": "redirect",
+									"value": "false",
+									"type": "text"
+								},
+								{
+									"key": "json",
+									"value": "true",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{server}}/api/auth/callback/credentials",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"callback",
+								"credentials"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/logout",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/api/logout",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "users",
+			"item": [
+				{
+					"name": "/users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/api/admin/users?filterValue[]=ad&filterId[]=email&page=1&limit=10&sort[]=name&order[]=true",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"users"
+							],
+							"query": [
+								{
+									"key": "filterValue[]",
+									"value": "ad"
+								},
+								{
+									"key": "filterId[]",
+									"value": "email"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "sort[]",
+									"value": "name"
+								},
+								{
+									"key": "order[]",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/users",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "New User",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "myemail@email.com",
+									"type": "text"
+								},
+								{
+									"key": "walletAddress",
+									"value": "stake1u80qxm73qm3t982h5sqt0ltnjyd2nykfsvfuxv3ywq3uy5g2weg6w",
+									"type": "text"
+								},
+								{
+									"key": "role",
+									"value": "admin",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{server}}/api/admin/users",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/users/:id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{server}}/api/admin/users/5aa1c2c35ef7a4e97b5e995c",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"users",
+								"5aa1c2c35ef7a4e97b5e995c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/users/:id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/api/admin/users/5aa1c2c35ef7a4e97b5e995b",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"users",
+								"5aa1c2c35ef7a4e97b5e995b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/users/:id",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "New Name",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "new@email.com",
+									"type": "text"
+								},
+								{
+									"key": "walletAddress",
+									"value": "WALLET",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{server}}/api/admin/users/5aa1c2c35ef7a4e97b5e995b",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"users",
+								"5aa1c2c35ef7a4e97b5e995b"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "profile",
+			"item": [
+				{
+					"name": "/profile",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/api/profile",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/profile",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "My Name Change",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{server}}/api/profile",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "csrfToken",
+			"value": "",
+			"type": "string"
+		}
+	]
+}

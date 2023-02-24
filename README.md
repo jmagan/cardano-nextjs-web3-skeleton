@@ -1,38 +1,55 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Cardano NextJS skeleton - Basic project skeleton
+
+This is a basic skeleton to bootstrap Cardano Web3 applications in NextJS. This template uses [CIP-0008 signing spec](https://github.com/cardano-foundation/CIPs/blob/master/CIP-0008/README.md) for endpoint authentication. it also includes tools for creating your own custom authenticated endpoints with Cardano wallets signatures. 
+
+The login model in this application uses wallet signatures to create the session JWT. This is useful for adding off-chain information to Cardano addresses and for creating own DIDs for your application.
+
+Next JS allows you to build React applications much faster and easier. One of its multipe benefits is to implement single page applications with server side components that improve considerably the speed and SEO of your webpages.
+
+## Features
+
+*   Cardano [CIP-0008 signing spec](https://github.com/cardano-foundation/CIPs/blob/master/CIP-0008/README.md) for the login and registration process.
+*   Multiple environment ready (development, production)
+*   NextAuth standard implementation.
+*   Encripted JWT token.
+*   Server Side Rendering components.
+*   User roles.
+*   Pagination ready.
+*   User profile.
+*   Users list for admin area.
+*   API collection example for Postman.
+*   Testing for API endpoints.
+*   NPM script for keeping good source code formatting using ESLint.
+*   Mailer example with Nodemailer and Mailgun.
+*   HTTPOnly jwt token cookie.
 
 ## Getting Started
 
-First, run the development server:
+
+
+First, you need to run a Mongo DB instance. The easiest way is a local instance deployed in a docker container:
 
 ```bash
+docker pull mongo
+docker run -d --name YOUR_CONTAINER_NAME_HERE mongo
+```
+
+You can use Compass for exploring your MongoDB instance. Then, you can run the development server:
+
+```bash
+npm install
 npm run dev
 # or
+yarn
 yarn dev
-# or
-pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## Postman
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+The `postman-example.json` contains a Postman collection with calls for all enpoints. You'll need to seed the database with the `seed.js` script before running the examples:
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```bash
+node ./seed.js
+```

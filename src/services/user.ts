@@ -12,7 +12,7 @@ export async function findUserByEmail(email: string) {
     {
       email,
     },
-    "password loginAttempts blockExpires name email role verified verification walletAddress"
+    "name email role verified verification walletAddress"
   );
 
   return user;
@@ -23,12 +23,11 @@ export async function findUserByEmail(email: string) {
  * @param {string} id - user´s id
  */
 export async function findUserByWalleAddress(walletAddress: string) {
-  // TODO: Implement user not found error 404
   const user = await UserModel.findOne(
     {
       walletAddress,
     },
-    "loginAttempts blockExpires name email role verified verification walletAddress"
+    "name email role verified verification walletAddress"
   );
 
   return user;
