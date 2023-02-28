@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getToken } from "next-auth/jwt";
 import mongoose from "mongoose";
+import * as yup from "yup";
 import * as userService from "@/services/user";
 import { handleError, HTTPError } from "@/utils/error";
 import { ApiDataResponse, ApiResponse } from "@/types/api";
@@ -13,7 +14,12 @@ export default async function handler(
 ) {
   const token = await getToken({ req });
 
-  if (!token || token.sub === undefined) {
+  if (
+    !token ||
+    token.sub === undefined ||
+    !token.role ||
+    token.role !== "admin"
+  ) {
     return handleError(res, new HTTPError(401));
   }
 
@@ -45,24 +51,57 @@ export default async function handler(
         await userToDelete.delete();
       }
       res.send({ message: "SUCCESS" });
+      break;
     case "PATCH":
-      let user = await userService.findUserById(
-        new mongoose.Types.ObjectId(userId)
-      );
+      try {
+        const userPatchRequest = yup.object({
+          name: yup.string().required(),
+          email: yup.string().required().email(),
+          walletAddress: yup.string().required(),
+          role: yup.string().required().oneOf(["admin", "user"]),
+        });
 
-      if (user) {
-        user.name = req.body.name;
-        user.email = req.body.email;
-        user.walletAddress = req.body.walletAddress;
-        user.role = req.body.role;
-        try {
-          await user.save();
-          res.send({ message: "SUCCESS" });
-        } catch (e) {
-          handleError(res, e);
+        const usePatchData = await userPatchRequest.validate(req.body, {
+          abortEarly: false,
+          stripUnknown: true,
+        });
+
+        const user = await userService.findUserById(
+          new mongoose.Types.ObjectId(userId)
+        );
+
+        const userSameEmail = await userService.findUserByEmail(
+          usePatchData.email
+        );
+
+        if (userSameEmail && userSameEmail._id !== user?._id) {
+          throw new HTTPError(400, "EMAIL_ALREADY_EXISTS");
         }
-      } else {
-        return handleError(res, new HTTPError(422));
+
+        const userSameWalletAddress = await userService.findUserByWalletAddress(
+          usePatchData.walletAddress
+        );
+
+        if (userSameWalletAddress && userSameWalletAddress._id !== user?._id) {
+          throw new HTTPError(400, "WALLET_ADDRESS_ALREADY_EXISTS");
+        }
+
+        if (user) {
+          user.name = req.body.name;
+          user.email = req.body.email;
+          user.walletAddress = req.body.walletAddress;
+          user.role = req.body.role;
+          try {
+            await user.save();
+            res.send({ message: "SUCCESS" });
+          } catch (e) {
+            handleError(res, e);
+          }
+        } else {
+          return handleError(res, new HTTPError(422));
+        }
+      } catch (e) {
+        return handleError(res, e);
       }
       break;
     default:

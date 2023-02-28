@@ -10,7 +10,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest"
+    "test": "node ./seed.js && jest"
   },
   "dependencies": {
     "@chakra-ui/icons": "^2.0.17",

@@ -46,7 +46,7 @@ export const authOptions: AuthOptions = {
             signature
           );
 
-          const user = await userService.findUserByWalleAddress(walletAddress);
+          const user = await userService.findUserByWalletAddress(walletAddress);
 
           if (user) {
             return {

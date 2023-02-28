@@ -21,7 +21,7 @@ const simpleUserWalletAddress = CSL.RewardAddress.new(
   .to_bech32();
 
   const userDeletePrivateKey = CSL.PrivateKey.from_normal_bytes(
-    new Array(32).fill(1)
+    new Array(32).fill(2)
   );
   const userDeleteWalletAddress = CSL.RewardAddress.new(
     CSL.NetworkId.mainnet().kind(),

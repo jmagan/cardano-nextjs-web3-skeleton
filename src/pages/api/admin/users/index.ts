@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getToken } from "next-auth/jwt";
+import * as yup from "yup";
 import * as userService from "@/services/user";
 import mongoose from "mongoose";
 import { ApiDataResponse, ApiResponse } from "@/types/api";
@@ -9,7 +10,9 @@ import UserModel from "@/models/UserModel";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<ApiResponse | ApiDataResponse<mongoose.PaginateModel<User>>>
+  res: NextApiResponse<
+    ApiResponse | ApiDataResponse<mongoose.PaginateResult<User>>
+  >
 ) {
   const token = await getToken({ req });
 
@@ -27,8 +30,8 @@ export default async function handler(
       res.send({
         message: "SUCCESS",
         data: await userService.findAll(
-          Number(req.query.page as string),
-          Number(req.query.limit as string),
+          Number((req.query.page as string) ?? 0),
+          Number((req.query.limit as string) ?? 10),
           req.query["sort[]"],
           req.query["order[]"],
           req.query["filterId[]"],
@@ -37,16 +40,52 @@ export default async function handler(
       } as ApiDataResponse<mongoose.PaginateResult<User>>);
       break;
     case "POST":
-      const userToPost = new UserModel({
-        name: req.body.name,
-        email: req.body.email,
-        walletAddress: req.body.walletAddress,
-        role: req.body.role,
-      });
-
       try {
+        const userPostRequest = yup.object({
+          name: yup.string().required(),
+          email: yup.string().required().email(),
+          walletAddress: yup.string().required(),
+          role: yup.string().required().oneOf(["admin", "user"]),
+        });
+
+        const userPostData = await userPostRequest.validate(req.body, {
+          stripUnknown: true,
+          abortEarly: false,
+        });
+
+        const userWithSameEmail = await userService.findUserByEmail(userPostData.email);
+
+        if (userWithSameEmail) {
+          throw new HTTPError(400, "EMAIL_ALREADY_EXISTS");
+        }
+
+        const userWithSameWalletAddress = await userService.findUserByWalletAddress(userPostData.walletAddress);
+
+        if (userWithSameWalletAddress) {
+          throw new HTTPError(400, "WALLET_ADDRESS_ALREADY_EXISTS");
+        }
+
+        const userToPost = new UserModel({
+          name: userPostData.name,
+          email: userPostData.email,
+          walletAddress: userPostData.walletAddress,
+          role: userPostData.role,
+        });
+
         await userToPost.save();
-        res.send({ message: "SUCCESS" });
+        res.send({
+          message: "SUCCESS",
+          data: {
+            docs: [userToPost as User],
+            totalDocs: 1,
+            totalPages: 1,
+            limit: 10,
+            offset: 0,
+            pagingCounter: 1,
+            hasNextPage: false,
+            hasPrevPage: false,
+          },
+        });
       } catch (e) {
         handleError(res, e);
       }

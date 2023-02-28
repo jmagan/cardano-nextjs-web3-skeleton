@@ -22,7 +22,7 @@ export async function findUserByEmail(email: string) {
  * Finds user by ID
  * @param {string} id - user´s id
  */
-export async function findUserByWalleAddress(walletAddress: string) {
+export async function findUserByWalletAddress(walletAddress: string) {
   const user = await UserModel.findOne(
     {
       walletAddress,

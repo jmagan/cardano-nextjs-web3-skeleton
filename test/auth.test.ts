@@ -469,6 +469,5 @@ afterAll(async () => {
 
   await Promise.all(promises);
 
-  console.log("Close connection");
   await mongoose.connection.close();
 });
