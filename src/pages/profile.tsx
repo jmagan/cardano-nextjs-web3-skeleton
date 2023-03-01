@@ -21,6 +21,7 @@ import { ApiDataResponse, ApiResponse } from "@/types/api";
 import User from "@/types/user";
 
 export default function Profile() {
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [walletAddress, setWalletAddress] = useState("");
@@ -38,6 +39,7 @@ export default function Profile() {
 
         const profile = response.data.data;
 
+        setUsername(profile.username);
         setEmail(profile.email);
         setName(profile.name);
         setWalletAddress(profile.walletAddress ?? "");
@@ -95,6 +97,10 @@ export default function Profile() {
           <form onSubmit={(evt) => saveProfile(evt)}>
             <Flex direction="column" gap="4">
               <Flex direction={{ base: "column", md: "row" }} gap="4">
+                <FormControl>
+                  <FormLabel>Username</FormLabel>
+                  <Input type="text" disabled={true} value={username} />
+                </FormControl>
                 <FormControl>
                   <FormLabel>Email address</FormLabel>
                   <Input type="email" disabled={true} value={email} />

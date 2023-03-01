@@ -15,15 +15,19 @@ import {
   Link,
   Avatar,
   FormControl,
-  Select
+  Select,
+  FormErrorMessage,
 } from "@chakra-ui/react";
-import { FaUserAlt, FaEnvelope } from "react-icons/fa";
+import { FaUserAlt, FaEnvelope, FaHashtag } from "react-icons/fa";
 import { useWallet } from "@meshsdk/react";
 import { FeedbackAlert } from "@/components/FeedbackAlert";
 import { handleReactApiError } from "@/utils/react";
+import useDebounce from "@/hooks/useDebounce";
+import { ApiResponse } from "@/types/api";
 
 const CFaUserAlt = chakra(FaUserAlt);
 const CFaEnvelope = chakra(FaEnvelope);
+const CFaHastag = chakra(FaHashtag);
 
 export default function SignUp() {
   const router = useRouter();
@@ -36,15 +40,20 @@ export default function SignUp() {
   );
 
   const [stakeAddresses, setStakeAddresses] = useState<Array<string>>([]);
+  const [userUsername, setUserUsername] = useState("");
+  const debouncedUsername = useDebounce(userUsername, 500);
+  const [invalidUsername, setInvalidUserName] = useState("");
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
 
+  // Select default wallet address
   useEffect(() => {
     if (stakeAddress === undefined && stakeAddresses?.length === 1) {
       setStakeAddress(stakeAddresses[0]);
     }
   }, [stakeAddress, stakeAddresses]);
 
+  // Load wallet addresses from wallet
   useEffect(() => {
     (async () => {
       if (connected) {
@@ -52,6 +61,29 @@ export default function SignUp() {
       }
     })();
   }, [wallet, connected]);
+
+  // Validate username
+  useEffect(() => {
+    const validateUsername = async () => {
+      if (debouncedUsername !== "") {
+        const response = await axios.get<ApiResponse>(
+          "/api/admin/users/validation/username",
+          { params: { username: debouncedUsername } }
+        );
+        const data = response.data;
+        console.log(data);
+
+        if (data.message === "Valid") {
+          setInvalidUserName("");
+        } else if (typeof data.message === "string") {
+          setInvalidUserName(data.message);
+        }
+      } else {
+        setInvalidUserName("");
+      }
+    };
+    validateUsername();
+  }, [debouncedUsername]);
 
   const userSignUp = async (evt: FormEvent) => {
     evt.preventDefault();
@@ -76,6 +108,7 @@ export default function SignUp() {
       await axios.post(
         "/api/signup",
         {
+          username: userUsername,
           name: userName,
           key: signature.key,
           signature: signature.signature,
@@ -119,7 +152,24 @@ export default function SignUp() {
               borderColor="gray.100"
               borderRadius="10px"
             >
-              <FeedbackAlert errorMessage={errorMessage}/>
+              <FeedbackAlert errorMessage={errorMessage} />
+              <FormControl isInvalid={invalidUsername !== ""}>
+                <InputGroup>
+                  <InputLeftElement pointerEvents="none">
+                    <CFaHastag color="gray.300" />
+                  </InputLeftElement>
+                  <Input
+                    type="name"
+                    required={true}
+                    placeholder="Username"
+                    minLength={4}
+                    maxLength={20}
+                    pattern="(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$"
+                    onChange={(event) => setUserUsername(event.target.value)}
+                  />
+                </InputGroup>
+                { invalidUsername !== "" && <FormErrorMessage>{ invalidUsername }</FormErrorMessage>}
+              </FormControl>
               <FormControl>
                 <InputGroup>
                   <InputLeftElement pointerEvents="none">

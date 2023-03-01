@@ -42,6 +42,14 @@ export default async function handler(
     case "POST":
       try {
         const userPostRequest = yup.object({
+          username: yup
+            .string()
+            .required()
+            .min(4)
+            .max(20)
+            .matches(
+              new RegExp("(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$")
+            ),
           name: yup.string().required(),
           email: yup.string().required().email(),
           walletAddress: yup.string().required(),
@@ -53,19 +61,23 @@ export default async function handler(
           abortEarly: false,
         });
 
-        const userWithSameEmail = await userService.findUserByEmail(userPostData.email);
+        const userWithSameEmail = await userService.findUserByEmail(
+          userPostData.email
+        );
 
         if (userWithSameEmail) {
           throw new HTTPError(400, "EMAIL_ALREADY_EXISTS");
         }
 
-        const userWithSameWalletAddress = await userService.findUserByWalletAddress(userPostData.walletAddress);
+        const userWithSameWalletAddress =
+          await userService.findUserByWalletAddress(userPostData.walletAddress);
 
         if (userWithSameWalletAddress) {
           throw new HTTPError(400, "WALLET_ADDRESS_ALREADY_EXISTS");
         }
 
         const userToPost = new UserModel({
+          username: userPostData.username,
           name: userPostData.name,
           email: userPostData.email,
           walletAddress: userPostData.walletAddress,

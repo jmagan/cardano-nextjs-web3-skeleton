@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import UserModel from "@/models/UserModel";
+import User from "@/types/user";
 
 export async function findUserById(userId: mongoose.Types.ObjectId) {
   const user = await UserModel.findById(userId);
@@ -29,6 +30,12 @@ export async function findUserByWalletAddress(walletAddress: string) {
     },
     "name email role verified verification walletAddress"
   );
+
+  return user;
+}
+
+export async function findUserByUsername(username: string) {
+  const user = await UserModel.findOne({username});
 
   return user;
 }

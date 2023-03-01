@@ -10,6 +10,7 @@ import {
   HStack,
   Input,
   Modal,
+  ModalBody,
   ModalCloseButton,
   ModalContent,
   ModalFooter,
@@ -33,6 +34,7 @@ export default function UserEditModal({
   const [errorMessage, setErrorMessage] = useState<string[]>([]);
   const [infoMessage, setInfoMessage] = useState<string[]>([]);
 
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [walletAddress, setWalletAddress] = useState("");
@@ -46,6 +48,7 @@ export default function UserEditModal({
         try {
           const response = await axios.get(`/api/admin/users/${userId}`);
 
+          setUsername(response.data.data.username);
           setEmail(response.data.data.email);
           setName(response.data.data.name);
           setWalletAddress(response.data.data.walletAddress);
@@ -55,6 +58,7 @@ export default function UserEditModal({
         }
       } else {
         setErrorMessage([]);
+        setUsername("");
         setEmail("");
         setName("");
         setWalletAddress("");
@@ -69,6 +73,7 @@ export default function UserEditModal({
     evt.preventDefault();
 
     const payload = {
+      username,
       name,
       email,
       walletAddress,
@@ -114,18 +119,27 @@ export default function UserEditModal({
       <ModalContent>
         <ModalHeader>
           <Heading className="modal-title">Edit user</Heading>
-          <ModalCloseButton />
         </ModalHeader>
-        <Flex direction="column" p="4">
-          <Box>
-            <FeedbackAlert
-              errorMessage={errorMessage}
-              infoMessage={infoMessage}
-            />
-          </Box>
-          <form id="edit-user-form" onSubmit={submitFormHandle}>
-            <Flex direction="column">
-              <HStack>
+        <ModalCloseButton />
+        <ModalBody>
+          <Flex direction="column" p="4">
+            <Box>
+              <FeedbackAlert
+                errorMessage={errorMessage}
+                infoMessage={infoMessage}
+              />
+            </Box>
+            <form id="edit-user-form" onSubmit={submitFormHandle}>
+              <FormControl mt="4">
+                <FormLabel htmlFor="username">Username</FormLabel>
+                <Input
+                  type="text"
+                  value={username}
+                  required
+                  onChange={(evt) => setUsername(evt.target.value)}
+                />
+              </FormControl>
+              <HStack mt="4">
                 <FormControl>
                   <FormLabel htmlFor="email">Email</FormLabel>
                   <Input
@@ -145,42 +159,37 @@ export default function UserEditModal({
                   />
                 </FormControl>
               </HStack>
-              <Box>
-                <FormControl>
-                  <FormLabel htmlFor="walletAddress">Wallet Address</FormLabel>
-                  <Input
-                    type="text"
-                    value={walletAddress}
-                    readOnly={!!userId}
-                    required
-                    onChange={(evt) => setWalletAddress(evt.target.value)}
-                  />
-                </FormControl>
-              </Box>
-
-              <Box className="col-12">
-                <FormControl>
-                  <FormLabel htmlFor="role">Role</FormLabel>
-                  <Select
-                    value={role}
-                    onChange={(evt) => setRole(evt.target.value)}
-                  >
-                    <option value="user">User</option>
-                    <option value="admin">Administrator</option>
-                  </Select>
-                </FormControl>
-              </Box>
-            </Flex>
-          </form>
-          <ModalFooter>
-            <Button type="button" onClick={onClose} me="4">
-              Close
-            </Button>
-            <Button type="submit" form="edit-user-form">
-              Save changes
-            </Button>
-          </ModalFooter>
-        </Flex>
+              <FormControl mt="4">
+                <FormLabel htmlFor="walletAddress">Wallet Address</FormLabel>
+                <Input
+                  type="text"
+                  value={walletAddress}
+                  readOnly={!!userId}
+                  required
+                  onChange={(evt) => setWalletAddress(evt.target.value)}
+                />
+              </FormControl>
+              <FormControl mt="4">
+                <FormLabel htmlFor="role">Role</FormLabel>
+                <Select
+                  value={role}
+                  onChange={(evt) => setRole(evt.target.value)}
+                >
+                  <option value="user">User</option>
+                  <option value="admin">Administrator</option>
+                </Select>
+              </FormControl>
+            </form>
+          </Flex>
+        </ModalBody>
+        <ModalFooter>
+          <Button type="button" onClick={onClose} me="4">
+            Close
+          </Button>
+          <Button type="submit" form="edit-user-form">
+            Save changes
+          </Button>
+        </ModalFooter>
       </ModalContent>
     </Modal>
   );

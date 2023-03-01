@@ -13,6 +13,12 @@ import { handleError, HTTPError } from "@/utils/error";
 import { handleWeb3Auth } from "@/utils/auth";
 
 const RegisterRequestValidator = yup.object({
+  username: yup
+    .string()
+    .required()
+    .min(4)
+    .max(20)
+    .matches(new RegExp("(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$")),
   name: yup.string().required(),
 });
 
@@ -22,7 +28,6 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-
   if (req.method !== "POST") {
     return handleError(res, new HTTPError(405));
   }
@@ -45,12 +50,14 @@ export default async function handler(
       abortEarly: false,
     });
 
-    const doesEmailOrWalletAddressExists =
+    const validUserData =
+      (await usernameExists(data.username)) ||
       (await emailExists(payload.email)) ||
       (await walletAddressExists(walletAddress));
 
-    if (!doesEmailOrWalletAddressExists) {
+    if (!validUserData) {
       const item = await registerUser({
+        username: data.username,
         name: data.name,
         walletAddress: walletAddress,
         email: payload.email,
@@ -65,6 +72,17 @@ export default async function handler(
   }
 }
 
+async function usernameExists(username: string) {
+  const user = await UserModel.findOne({
+    username,
+  });
+
+  if (user) {
+    throw new HTTPError(400, "Username already exists");
+  }
+  return false;
+}
+
 /**
  * Checks User model if user with an specific email exists
  * @param {string} email - user email
@@ -75,7 +93,7 @@ async function emailExists(email: string) {
   });
 
   if (user) {
-    throw new HTTPError(400, "EMAIL_ALREADY_EXISTS");
+    throw new HTTPError(400, "Email already exists");
   }
   return false;
 }
@@ -90,7 +108,7 @@ async function walletAddressExists(walletAddress: string) {
   });
 
   if (user) {
-    throw new HTTPError(400, "WALLET_ALREADY_EXISTS");
+    throw new HTTPError(400, "Wallet address already exists");
   }
   return false;
 }
@@ -101,6 +119,7 @@ async function walletAddressExists(walletAddress: string) {
  */
 function registerUser(req: any) {
   const user = new UserModel({
+    username: req.username,
     name: req.name,
     email: req.email,
     walletAddress: req.walletAddress,
@@ -116,6 +135,7 @@ function registerUser(req: any) {
 function setUserInfo(req: any) {
   let user: any = {
     _id: req._id,
+    username: req.username,
     name: req.name,
     email: req.email,
     role: req.role,

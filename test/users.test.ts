@@ -243,6 +243,7 @@ describe("/POST user", () => {
 
   it("it should POST a user ", async () => {
     const user = {
+      username: faker.internet.userName(),
       name: faker.random.words(),
       email,
       walletAddress: faker.random.words(),
@@ -276,6 +277,7 @@ describe("/POST user", () => {
 
   it("it should NOT POST a user with email that already exists", async () => {
     const user = {
+      username: faker.internet.userName(),
       name: faker.random.words(),
       email,
       password: faker.random.words(),
@@ -307,6 +309,7 @@ describe("/POST user", () => {
 
   it("it should NOT POST a user with wallet address that already exists", async () => {
     const user = {
+      username: faker.internet.userName(),
       name: faker.random.words(),
       email: faker.internet.email(),
       password: faker.random.words(),
@@ -338,6 +341,7 @@ describe("/POST user", () => {
 
   it("it should NOT POST a user with not known role", async () => {
     const user = {
+      username: faker.internet.userName(),
       name: faker.random.words(),
       email: faker.internet.email(),
       password: faker.random.words(),
@@ -403,6 +407,7 @@ describe("/PATCH/:id user", () => {
       fail("No user id");
     }
     const user = {
+      username: faker.internet.userName(),
       name: faker.name.findName(),
       email: "email@email.com",
       role: "admin",
@@ -426,7 +431,7 @@ describe("/PATCH/:id user", () => {
         const body = (await res.json()) as ApiDataResponse<User>;
 
         expect(res.status).toBe(200);
-        expect(body.message).toBe("SUCCESS");
+        expect(body.message).toBe("Success");
       },
     });
   });
@@ -437,6 +442,7 @@ describe("/PATCH/:id user", () => {
     }
 
     const user = {
+      username: faker.internet.userName(),
       name: faker.random.words(),
       email: "admin@admin.com",
       role: "admin",
@@ -460,7 +466,7 @@ describe("/PATCH/:id user", () => {
         const body = (await res.json()) as ApiDataResponse<User>;
 
         expect(res.status).toBe(400);
-        expect(body.message).toBe("EMAIL_ALREADY_EXISTS");
+        expect(body.message).toBe("Email already exists");
       },
     });
   });
@@ -472,6 +478,7 @@ describe("/PATCH/:id user", () => {
     }
 
     const user = {
+      username: faker.internet.userName(),
       name: faker.random.words(),
       email: faker.internet.email(),
       role: "admin",
@@ -495,7 +502,43 @@ describe("/PATCH/:id user", () => {
         const body = (await res.json()) as ApiDataResponse<User>;
 
         expect(res.status).toBe(400);
-        expect(body.message).toBe("WALLET_ADDRESS_ALREADY_EXISTS");
+        expect(body.message).toBe("Wallet address already exists");
+      },
+    });
+  });
+
+  it("it should NOT UPDATE a user with username that already exists", async () => {
+    const id = createdID.slice(-1).pop();
+    if (!id) {
+      fail("No user id");
+    }
+
+    const user = {
+      username: "admin",
+      name: faker.random.words(),
+      email: faker.internet.email(),
+      role: "admin",
+      walletAddress: faker.random.alphaNumeric(23),
+    };
+
+    await testApiHandler({
+      url: `/api/admin/users/${id}`,
+      params: { userId: id },
+      handler: userHandler,
+      requestPatcher: patchSessionCookie(sessionCookies.admin),
+      test: async ({ fetch }) => {
+        const res = await fetch({
+          method: "PATCH",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify(user),
+        });
+
+        const body = (await res.json()) as ApiDataResponse<User>;
+
+        expect(res.status).toBe(400);
+        expect(body.message).toBe("Username already exists");
       },
     });
   });
@@ -507,6 +550,7 @@ describe("/PATCH/:id user", () => {
     }
 
     const user = {
+      username: faker.internet.userName(),
       name: faker.random.words(),
       email: "toto@toto.com",
       role: "user",
@@ -536,6 +580,7 @@ describe("/PATCH/:id user", () => {
 describe("/DELETE/:id user", () => {
   it("it should DELETE a user given the id", async () => {
     const user = {
+      username: faker.internet.userName(),
       name: faker.random.words(),
       email,
       walletAddress: faker.random.words(),

@@ -26,7 +26,7 @@ export default async function handler(
         return handleError(res, new HTTPError(400));
       }
       res.send({
-        message: "OK",
+        message: "Ok",
         data: getUser,
       });
       break;
@@ -48,9 +48,9 @@ export default async function handler(
         if (user) {
           user.name = patchData.name;
           user.save();
-          res.send({ message: "SUCCESS" });
+          res.send({ message: "Success" });
         } else {
-          return handleError(res, new HTTPError(422, "USER_ERROR"));
+          return handleError(res, new HTTPError(422, "User not found"));
         }
       } catch (e) {
         handleError(res, e);

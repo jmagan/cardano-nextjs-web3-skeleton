@@ -262,6 +262,7 @@ describe("/POST signin", () => {
 describe("/POST signup", () => {
   it("it should POST register user 1", async () => {
     const user = {
+      username: faker.internet.userName(),
       name: testName,
       key: Buffer.from(createCOSEKey(stakePrivateKey1).to_bytes()).toString(
         "hex"
@@ -297,6 +298,7 @@ describe("/POST signup", () => {
   });
   it("it should NOT POST a register if wallet address already exists", async () => {
     const user = {
+      username: faker.internet.userName(),
       name: testName,
       key: Buffer.from(createCOSEKey(stakePrivateKey1).to_bytes()).toString(
         "hex"
@@ -324,12 +326,13 @@ describe("/POST signup", () => {
 
         expect(res.status).toBe(400);
         expect(body).toHaveProperty("message");
-        expect(body.message).toBe("WALLET_ALREADY_EXISTS");
+        expect(body.message).toBe("Wallet address already exists");
       },
     });
   });
   it("it should NOT POST a register if email already exists", async () => {
     const user = {
+      username: faker.internet.userName(),
       name: testName,
       key: Buffer.from(createCOSEKey(stakePrivateKey1).to_bytes()).toString(
         "hex"
@@ -357,7 +360,41 @@ describe("/POST signup", () => {
 
         expect(res.status).toBe(400);
         expect(body).toHaveProperty("message");
-        expect(body.message).toBe("EMAIL_ALREADY_EXISTS");
+        expect(body.message).toBe("Email already exists");
+      },
+    });
+  });
+  it("it should NOT POST a register if username exists", async () => {
+    const user = {
+      username: "admin",
+      name: faker.name.findName(),
+      key: Buffer.from(createCOSEKey(stakePrivateKey1).to_bytes()).toString(
+        "hex"
+      ),
+      signature: Buffer.from(
+        createRegisterUserSignature(
+          testEmail,
+          stakeAddress1,
+          stakePrivateKey1
+        ).to_bytes()
+      ).toString("hex"),
+    };
+    await testApiHandler({
+      handler: signUpHandler,
+      url: "/api/signup",
+      test: async ({ fetch }) => {
+        const res = await fetch({
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify(user),
+        });
+        const body = await res.json();
+
+        expect(res.status).toBe(400);
+        expect(body).toHaveProperty("message");
+        expect(body.message).toBe("Username already exists");
       },
     });
   });

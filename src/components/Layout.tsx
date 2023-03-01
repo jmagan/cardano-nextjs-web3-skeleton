@@ -14,6 +14,7 @@ import React from "react";
 import { useWallet } from "@meshsdk/react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { ExtendedSession } from "@/pages/api/auth/[...nextauth]";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -62,7 +63,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   p="4"
                 >
                   <Box>
-                    <Icon as={FaUser} /> {session.user?.name}
+                    <Icon as={FaUser} /> {(session as ExtendedSession).username}
                   </Box>
                 </Center>
               </Link>

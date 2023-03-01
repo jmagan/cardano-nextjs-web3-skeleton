@@ -5,6 +5,11 @@ import validator from "validator";
 
 const UserSchema = new mongoose.Schema<User>(
   {
+    username: {
+      type: String,
+      required: true,
+      unique: true
+    },
     name: {
       type: String,
       required: true,
@@ -22,6 +27,7 @@ const UserSchema = new mongoose.Schema<User>(
     walletAddress: {
       type: String,
       required: true,
+      unique: true
     },
     role: {
       type: String,

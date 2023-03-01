@@ -55,6 +55,14 @@ export default async function handler(
     case "PATCH":
       try {
         const userPatchRequest = yup.object({
+          username: yup
+            .string()
+            .required()
+            .min(4)
+            .max(20)
+            .matches(
+              new RegExp("(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$")
+            ),
           name: yup.string().required(),
           email: yup.string().required().email(),
           walletAddress: yup.string().required(),
@@ -74,26 +82,33 @@ export default async function handler(
           usePatchData.email
         );
 
-        if (userSameEmail && userSameEmail._id !== user?._id) {
-          throw new HTTPError(400, "EMAIL_ALREADY_EXISTS");
+        if (userSameEmail && userSameEmail._id.toString() !== user?._id.toString()) {
+          throw new HTTPError(400, "Email already exists");
         }
 
         const userSameWalletAddress = await userService.findUserByWalletAddress(
           usePatchData.walletAddress
         );
 
-        if (userSameWalletAddress && userSameWalletAddress._id !== user?._id) {
-          throw new HTTPError(400, "WALLET_ADDRESS_ALREADY_EXISTS");
+        if (userSameWalletAddress && userSameWalletAddress._id.toString() !== user?._id.toString()) {
+          throw new HTTPError(400, "Wallet address already exists");
+        }
+
+        const userSameUsername = await userService.findUserByUsername(usePatchData.username);
+
+        if (userSameUsername && userSameUsername._id.toString() !== user?._id.toString()) {
+          throw new HTTPError(400, "Username already exists");
         }
 
         if (user) {
-          user.name = req.body.name;
-          user.email = req.body.email;
-          user.walletAddress = req.body.walletAddress;
-          user.role = req.body.role;
+          user.username = usePatchData.username;
+          user.name = usePatchData.name;
+          user.email = usePatchData.email;
+          user.walletAddress = usePatchData.walletAddress;
+          user.role = usePatchData.role;
           try {
             await user.save();
-            res.send({ message: "SUCCESS" });
+            res.send({ message: "Success" });
           } catch (e) {
             handleError(res, e);
           }

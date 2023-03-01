@@ -118,7 +118,7 @@ describe("/GET profile", () => {
         });
         const body = await res.json();
         expect(res.status).toBe(200);
-        expect(body.message).toBe("OK");
+        expect(body.message).toBe("Ok");
       },
     });
   });
@@ -168,7 +168,7 @@ describe("/PATCH profile", () => {
 
         const body = JSON.parse(text);
         expect(res.status).toBe(200);
-        expect(body.message).toBe("SUCCESS");
+        expect(body.message).toBe("Success");
       },
     });
   });

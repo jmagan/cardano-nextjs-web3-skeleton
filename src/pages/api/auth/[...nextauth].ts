@@ -86,7 +86,9 @@ export const authOptions: AuthOptions = {
         return session;
       }
       (session as ExtendedSession).role = token.role as string;
+      (session as ExtendedSession).username = user.username;
       session.user!.name = user.name;
+
 
       return session;
     },
@@ -110,6 +112,7 @@ export const authOptions: AuthOptions = {
 };
 
 export interface ExtendedSession extends Session {
+  username: string;
   role: string;
 }
 

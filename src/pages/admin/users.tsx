@@ -91,6 +91,9 @@ export default function UserPage() {
         enableColumnFilter: false,
         cell: actionsCell,
       }),
+      columnHelper.accessor("username", {
+        header: "Username",
+      }),
       columnHelper.accessor("name", {
         header: "Name",
       }),

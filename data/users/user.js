@@ -33,6 +33,7 @@ const simpleUserWalletAddress = CSL.RewardAddress.new(
 module.exports = [
   {
     _id: new ObjectID("5aa1c2c35ef7a4e97b5e995a"),
+    username: "admin",
     name: "Super Administrator",
     email: "admin@admin.com",
     role: "admin",
@@ -44,6 +45,7 @@ module.exports = [
   },
   {
     _id: new ObjectID("5aa1c2c35ef7a4e97b5e995b"),
+    username: "simpleuser",
     name: "Simple user",
     email: "user@user.com",
     walletAddress: simpleUserWalletAddress,
@@ -55,6 +57,7 @@ module.exports = [
   },
   {
     _id: new ObjectID("5aa1c2c35ef7a4e97b5e995c"),
+    username: "usertodelete",
     name: "User to delete",
     email: "delete@user.com",
     walletAddress: userDeleteWalletAddress,
