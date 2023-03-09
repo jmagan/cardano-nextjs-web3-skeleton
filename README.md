@@ -31,7 +31,7 @@ First, you need to run a Mongo DB instance. The easiest way is a local instance 
 
 ```bash
 docker pull mongo
-docker run -d --name YOUR_CONTAINER_NAME_HERE mongo
+docker run -d -p 27017:27017 --name YOUR_CONTAINER_NAME_HERE mongo
 ```
 
 You can use Compass for exploring your MongoDB instance. Then, you can run the development server:
